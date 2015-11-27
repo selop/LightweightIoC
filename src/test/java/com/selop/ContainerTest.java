@@ -92,13 +92,6 @@ public class ContainerTest {
         } catch (BeanNotFoundException e) {
             Assert.assertThat(e.getMessage(), is("Given bean name : " + "Alias" + " was not found."));
         }
-
-        instance.getNamedBeans().put("Alias",AnotherBean.class);
-        try {
-            Assert.assertTrue(instance.resolve("Alias") instanceof AnotherBean);
-        } catch (BeanNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
