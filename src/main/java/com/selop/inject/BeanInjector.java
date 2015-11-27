@@ -2,6 +2,7 @@ package com.selop.inject;
 
 import com.selop.annotation.Bean;
 import com.selop.container.SimpleContainer;
+import com.selop.exception.BeanNotFoundException;
 import com.selop.exception.NoBeanAnnotationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class BeanInjector implements Injector {
 
     private static Logger log = LoggerFactory.getLogger(BeanInjector.class);
 
-    public <T> void inject(T bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException, NoBeanAnnotationException {
+    public <T> void inject(T bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException, NoBeanAnnotationException, BeanNotFoundException {
 
         SimpleContainer container = SimpleContainer.getInstance();
 

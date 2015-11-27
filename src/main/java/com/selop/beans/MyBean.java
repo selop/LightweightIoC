@@ -16,7 +16,6 @@ public class MyBean {
     }
 
     @Inject
-    @Named("kindchen")
     Child child;
 
     @Inject

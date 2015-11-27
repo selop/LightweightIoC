@@ -12,13 +12,13 @@ import javax.inject.Singleton;
 @Bean
 public class Parent {
     @Inject
-    protected MyBean bean;
+    protected AnotherBean bean;
 
-    public MyBean getBean() {
+    public AnotherBean getBean() {
         return bean;
     }
 
-    public void setBean(MyBean bean) {
+    public void setBean(AnotherBean bean) {
         this.bean = bean;
     }
 }

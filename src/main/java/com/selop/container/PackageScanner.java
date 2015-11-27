@@ -38,17 +38,13 @@ public class PackageScanner {
                 Named named = bean.getAnnotation(Named.class);
                 String name = named != null ? named.value() : null;
 
-                if (name == null || name.length() == 0) {
+                if (name == null || name.length() == 0)
                     name = bean.getSimpleName();
-                }
 
-                // TODO: 24/11/15  
                 scanNamedBeans(bean, name);
 
-                // TODO: 24/11/15  
                 scanSingletonBean(bean, name);
 
-                // TODO: 24/11/15  
                 scanInterfaces(bean);
             }
         });

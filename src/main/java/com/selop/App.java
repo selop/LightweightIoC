@@ -16,8 +16,6 @@ public class App {
 
     protected static Logger log = LoggerFactory.getLogger(App.class);
 
-    private SimpleContainer container = SimpleContainer.getInstance();
-
     private static final String PACKAGE_ROOT = "com.selop.beans";
 
     public static void main( String[] args ) {
@@ -29,12 +27,14 @@ public class App {
         scanner.scan(PACKAGE_ROOT);
 
         try {
+            // manual injection
             MyBean testBean = new MyBean();
             injector.inject(testBean);
+
+            // automatic injection
+            SimpleContainer.getInstance().resolve(MyBean.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }

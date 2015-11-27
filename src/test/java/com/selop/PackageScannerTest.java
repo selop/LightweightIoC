@@ -1,9 +1,13 @@
 package com.selop;
 
 import com.selop.container.PackageScanner;
+import com.selop.container.SimpleContainer;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,22 +20,45 @@ import java.util.stream.Collectors;
 public class PackageScannerTest {
 
     private static final String PACKAGE_ROOT = "com.selop.beans";
+    // TODO: 27/11/15 not clean, make sure to read this via ReflectionsAPi
+    private static final int BEANS_ANNOTATED_WITH_SINGLETON = 3;
+    private static final int BEANS_ANNOTATED_WITH_NAMED = 3;
 
-    private static final int BEANS_ANNOTATED_WITH_SINGLETON = 2;
+    private PackageScanner scanner;
+
+    @Before
+    public void before() {
+        scanner = new PackageScanner();
+    }
+
+    @After
+    public void after() {
+        SimpleContainer.getInstance().release();
+    }
 
     @Test
-    public void checkCountOfFoundBeansWithSingletonAnnotation() {
-        PackageScanner scanner = new PackageScanner();
+    public void scannerNotNull() {
+        Assert.assertNotNull(scanner);
+    }
 
+    @Test
+    public void checkCountOfFoundBeansWithAnnotations() {
         scanner.scan(PACKAGE_ROOT);
 
-        List<Class<?>> beans = scanner.getBeans()
+        List<Class<?>> beanSingleton = scanner.getBeans()
                 .stream()
                 .filter(bean -> bean.isAnnotationPresent(Singleton.class))
                 .collect(Collectors.toList());
 
-        Assert.assertEquals(beans.size(), BEANS_ANNOTATED_WITH_SINGLETON);
-    }
+        List<Class<?>> beanNamed = scanner.getBeans()
+                .stream()
+                .filter(bean -> bean.isAnnotationPresent(Named.class))
+                .collect(Collectors.toList());
 
-    // TODO: 25/11/15 restliche Tests
+        Assert.assertNotNull(beanSingleton);
+        Assert.assertNotNull(beanNamed);
+
+        Assert.assertEquals(beanSingleton.size(), BEANS_ANNOTATED_WITH_SINGLETON);
+        Assert.assertEquals(beanNamed.size(), BEANS_ANNOTATED_WITH_NAMED);
+    }
 }

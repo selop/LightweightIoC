@@ -1,5 +1,7 @@
 package com.selop.container;
 
+import com.selop.annotation.Bean;
+import com.selop.exception.BeanNotFoundException;
 import com.selop.exception.NoBeanAnnotationException;
 import com.selop.inject.BeanInjector;
 import org.slf4j.Logger;
@@ -33,7 +35,12 @@ public class SimpleContainer implements IoC {
         return instance;
     }
 
-    public <T> T register(Class<T> cls) throws InstantiationException, IllegalAccessException, IllegalArgumentException,InvocationTargetException, NoBeanAnnotationException {
+    public <T> T createInstance(Class<T> cls) throws InstantiationException, IllegalAccessException, IllegalArgumentException,InvocationTargetException, NoBeanAnnotationException, BeanNotFoundException {
+
+        if (!cls.isAnnotationPresent(Bean.class)){
+            log.info("Adding classes without @Bean annotation is not supported.");
+            throw new NoBeanAnnotationException(cls.getCanonicalName() + " has not been flagged as @Bean");
+        }
 
         String clsName = cls.getCanonicalName();
         log.info("Register bean : " + clsName);
@@ -67,34 +74,35 @@ public class SimpleContainer implements IoC {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T resolve(Class type) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoBeanAnnotationException {
+    public <T> T resolve(Class type) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoBeanAnnotationException, BeanNotFoundException {
 
-        T bean = null;
+        T bean;
 
         if ( registeredBeans.containsKey(type) ) {
             Object obj = registeredBeans.get(type);
 
             if ( obj == null ){
-                obj = register(type);
+                obj = createInstance(type);
                 registeredBeans.put(type, obj);
             }
             bean = (T) obj;
 
         } else {
-            bean = (T) register(type);
+            bean = (T) createInstance(type);
         }
 
         return bean;
     }
 
-    public Object resolve(String value) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoBeanAnnotationException{
+    public Object resolve(String value) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoBeanAnnotationException, BeanNotFoundException{
         Class cls = namedBeans.get(value);
 
         if ( cls == null )
-            throw new InstantiationException("Given bean name : " + value + " was not found.");
+            throw new BeanNotFoundException("Given bean name : " + value + " was not found.");
 
         return resolve(cls);
     }
+
 
     public Map<Class, Object> getRegisteredBeans() {
         return registeredBeans;
@@ -110,5 +118,10 @@ public class SimpleContainer implements IoC {
         return interfaces;
     }
 
-
+    /** Releases all references to beans. */
+    public void release() {
+        namedBeans.clear();
+        registeredBeans.clear();
+        interfaces.clear();
+    }
 }
