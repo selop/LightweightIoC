@@ -27,7 +27,7 @@ public class ContainerTest {
     }
 
     @Test
-    public void addingBeanWithoutAnnotationLeadsToException() throws NullPointerException, InvocationTargetException, IllegalAccessException, InstantiationException, BeanNotFoundException{
+    public void addingBeanWithoutAnnotationLeadsToException() throws Exception {
         NoAnnotationBean bean = new NoAnnotationBean();
         try {
             SimpleContainer.getInstance().createInstance(bean.getClass());
@@ -72,7 +72,7 @@ public class ContainerTest {
      */
     @Test
     @Ignore
-    public void circularDependencyLeadsToException () throws IllegalAccessException, InvocationTargetException, NoBeanAnnotationException, BeanNotFoundException {
+    public void circularDependencyLeadsToException () throws Exception {
         try {
             SimpleContainer.getInstance().getNamedBeans().put("MyBean",MyBean.class);
             SimpleContainer.getInstance().resolve("MyBean");
@@ -83,7 +83,7 @@ public class ContainerTest {
     }
 
     @Test
-    public void beanAliasNotFoundLeadsToException () throws IllegalAccessException, InvocationTargetException, InstantiationException, NoBeanAnnotationException {
+    public void beanAliasNotFoundLeadsToException () throws Exception {
         SimpleContainer instance = SimpleContainer.getInstance();
 
         try {
@@ -95,7 +95,7 @@ public class ContainerTest {
     }
 
     @Test
-    public void beanAliasIsTheProperInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoBeanAnnotationException {
+    public void beanAliasIsTheProperInstance() throws Exception {
         SimpleContainer instance = SimpleContainer.getInstance();
         final String alias = "Alias";
 

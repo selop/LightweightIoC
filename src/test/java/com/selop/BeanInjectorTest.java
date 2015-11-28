@@ -4,7 +4,6 @@ import com.selop.beans.Child;
 import com.selop.beans.NoAnnotationBean;
 import com.selop.beans.NoInjectFieldsBean;
 import com.selop.container.SimpleContainer;
-import com.selop.exception.BeanNotFoundException;
 import com.selop.exception.NoBeanAnnotationException;
 import com.selop.inject.BeanInjector;
 import org.junit.After;
@@ -12,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -29,7 +27,7 @@ public class BeanInjectorTest {
     }
 
     @Test
-    public void noBeanAnnotationShouldLeadToNoBeanAnnoException() throws IllegalAccessException, InvocationTargetException, InstantiationException, BeanNotFoundException {
+    public void noBeanAnnotationShouldLeadToNoBeanAnnoException() throws Exception {
         NoAnnotationBean bean = new NoAnnotationBean();
         BeanInjector injector = new BeanInjector();
         try {

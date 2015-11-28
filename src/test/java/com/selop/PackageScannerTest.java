@@ -26,9 +26,23 @@ public class PackageScannerTest {
 
     private PackageScanner scanner;
 
+    List<Class<?>> beanSingleton;
+    List<Class<?>> beanNamed;
+
     @Before
     public void before() {
         scanner = new PackageScanner();
+        scanner.scan(PACKAGE_ROOT);
+
+        beanSingleton = scanner.getBeans()
+                .stream()
+                .filter(bean -> bean.isAnnotationPresent(Singleton.class))
+                .collect(Collectors.toList());
+
+        beanNamed = scanner.getBeans()
+                .stream()
+                .filter(bean -> bean.isAnnotationPresent(Named.class))
+                .collect(Collectors.toList());
     }
 
     @After
@@ -42,23 +56,23 @@ public class PackageScannerTest {
     }
 
     @Test
-    public void checkCountOfFoundBeansWithAnnotations() {
-        scanner.scan(PACKAGE_ROOT);
-
-        List<Class<?>> beanSingleton = scanner.getBeans()
-                .stream()
-                .filter(bean -> bean.isAnnotationPresent(Singleton.class))
-                .collect(Collectors.toList());
-
-        List<Class<?>> beanNamed = scanner.getBeans()
-                .stream()
-                .filter(bean -> bean.isAnnotationPresent(Named.class))
-                .collect(Collectors.toList());
-
+    public void beanListSingletonNotNull() {
         Assert.assertNotNull(beanSingleton);
-        Assert.assertNotNull(beanNamed);
+    }
 
+    @Test
+    public void beanListNamedNotNull() {
+        Assert.assertNotNull(beanNamed);
+    }
+
+    @Test
+    public void checkCountOfFoundBeansWithSingletonAnnotations() {
         Assert.assertEquals(beanSingleton.size(), BEANS_ANNOTATED_WITH_SINGLETON);
+    }
+
+    @Test
+    public void checkCountOfFoundBeansWithNamedAnnotations() {
         Assert.assertEquals(beanNamed.size(), BEANS_ANNOTATED_WITH_NAMED);
     }
+
 }
