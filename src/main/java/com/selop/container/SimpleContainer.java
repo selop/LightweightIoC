@@ -49,10 +49,11 @@ public class SimpleContainer implements IoC {
 
         if (cls.isInterface()) {
             Class clsImpl = interfaces.get(cls); // TODO check if get of List already throws exception and will never return null
-            String iName = clsImpl.getCanonicalName();
+
             if (clsImpl == null)
                 throw new InstantiationException("No bean is known to implement the " + clsName + " interface");
 
+            String iName = clsImpl.getCanonicalName();
             log.debug("Injecting class " + iName + " in place of the " + clsName + " interface" );
 
             cls = clsImpl;

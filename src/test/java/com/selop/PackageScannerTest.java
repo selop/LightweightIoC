@@ -21,7 +21,7 @@ public class PackageScannerTest {
 
     private static final String PACKAGE_ROOT = "com.selop.beans";
     // TODO: 27/11/15 not clean, make sure to read this via ReflectionsAPi
-    private static final int BEANS_ANNOTATED_WITH_SINGLETON = 3;
+    private static final int BEANS_ANNOTATED_WITH_SINGLETON = 6;
     private static final int BEANS_ANNOTATED_WITH_NAMED = 3;
 
     private PackageScanner scanner;

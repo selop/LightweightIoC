@@ -45,6 +45,7 @@ public class BeanInjector implements Injector {
                 // Assume, that only classes which match Bean conventions will be annotated with @Bean
                 setterMethod = new PropertyDescriptor(fieldName, cls).getWriteMethod();
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new IllegalAccessException("Error invoking method " + setterMethod.getName() + " on class " + className);
             }
 

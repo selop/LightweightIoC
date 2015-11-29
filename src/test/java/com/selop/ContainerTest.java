@@ -1,17 +1,14 @@
 package com.selop;
 
 import com.selop.beans.AnotherBean;
-import com.selop.beans.MyBean;
 import com.selop.beans.NoAnnotationBean;
+import com.selop.beans.subpackage.CircularDepBean;
 import com.selop.container.SimpleContainer;
 import com.selop.exception.BeanNotFoundException;
 import com.selop.exception.NoBeanAnnotationException;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.lang.reflect.InvocationTargetException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.fail;
@@ -31,28 +28,16 @@ public class ContainerTest {
         NoAnnotationBean bean = new NoAnnotationBean();
         try {
             SimpleContainer.getInstance().createInstance(bean.getClass());
-            fail("Expected NoBeanAnnotaionException to be thrown");
+            fail("Expected NoBeanAnnotationException to be thrown");
         } catch (NoBeanAnnotationException e) {
             Assert.assertThat(e.getMessage(), is(bean.getClass().getCanonicalName() + " has not been flagged as @Bean"));
         }
     }
 
     @Test
-    public void addingBeanRegistered() {
-        try {
-            SimpleContainer.getInstance().getRegisteredBeans().put(AnotherBean.class, null);
-            SimpleContainer.getInstance().resolve(AnotherBean.class);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoBeanAnnotationException e) {
-            e.printStackTrace();
-        } catch (BeanNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void addingBeanRegistered()  throws Exception {
+        SimpleContainer.getInstance().getRegisteredBeans().put(AnotherBean.class, null);
+        SimpleContainer.getInstance().resolve(AnotherBean.class);
 
         Assert.assertFalse(SimpleContainer.getInstance().getRegisteredBeans().isEmpty());
         Assert.assertEquals(SimpleContainer.getInstance().getRegisteredBeans().size(),1);
@@ -64,30 +49,25 @@ public class ContainerTest {
     }
 
     /*
-     *  MyBean -- injectDependency --> Child
+     *  Bean -- injectDependency --> Child
      *  Child extends Parent
-     *  Parent -- injectDependency --> MyBean
-     *
-     *  todo change Parent field to MyBean for test, automate switch?
+     *  Parent -- injectDependency --> Bean
      */
     @Test
-    @Ignore
-    public void circularDependencyLeadsToException () throws Exception {
+    public void circularDependencyLeadsToException() throws Exception {
         try {
-            SimpleContainer.getInstance().getNamedBeans().put("MyBean",MyBean.class);
-            SimpleContainer.getInstance().resolve("MyBean");
+            SimpleContainer.getInstance().getNamedBeans().put("CircularDepBean",CircularDepBean.class);
+            SimpleContainer.getInstance().resolve("CircularDepBean");
             fail("Expected InstantiationException to be thrown");
         } catch (InstantiationException e) {
-            Assert.assertThat(e.getMessage(), is("Circle detected for class " + MyBean.class.getCanonicalName()));
+            Assert.assertThat(e.getMessage(), is("Circle detected for class " + CircularDepBean.class.getCanonicalName()));
         }
     }
 
     @Test
-    public void beanAliasNotFoundLeadsToException () throws Exception {
-        SimpleContainer instance = SimpleContainer.getInstance();
-
+    public void beanAliasNotFoundLeadsToException() throws Exception {
         try {
-            instance.resolve("Alias");
+            SimpleContainer.getInstance().resolve("Alias");
             fail("Expected BeanNotFoundException to be thrown");
         } catch (BeanNotFoundException e) {
             Assert.assertThat(e.getMessage(), is("Given bean name : " + "Alias" + " was not found."));
@@ -100,10 +80,6 @@ public class ContainerTest {
         final String alias = "Alias";
 
         instance.getNamedBeans().put(alias,AnotherBean.class);
-        try {
-            Assert.assertTrue(instance.resolve(alias) instanceof AnotherBean);
-        } catch (BeanNotFoundException e) {
-            e.printStackTrace();
-        }
+        Assert.assertTrue(instance.resolve(alias) instanceof AnotherBean);
     }
 }
