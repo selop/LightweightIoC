@@ -5,11 +5,12 @@ import com.selop.annotation.Bean;
 import javax.inject.Singleton;
 
 /**
- * Created by selop on 23/11/15.
+ * Testing circular dependencies.
+ *
+ * @author selop
  */
 @Bean
 @Singleton
 public class Child extends Parent {
-
     // extending Parent Bean class for super field
 }

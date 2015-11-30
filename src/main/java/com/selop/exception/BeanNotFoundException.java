@@ -1,7 +1,9 @@
 package com.selop.exception;
 
 /**
- * Created by selop on 27/11/15.
+ * Thrown when the DI container lookup for a class fails.
+ *
+ * @author selop
  */
 public class BeanNotFoundException extends Exception{
     public BeanNotFoundException() {

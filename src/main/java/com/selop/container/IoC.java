@@ -5,9 +5,6 @@ import com.selop.exception.NoBeanAnnotationException;
 
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * Created by selop on 23/11/15.
- */
 public interface IoC {
 
     /**
@@ -27,7 +24,7 @@ public interface IoC {
      * Ask the container for a bean by passing a @Named String.
      *
      * @param beanName
-     * @return
+     * @return Instance of an Object that matches the @Named signature.
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws IllegalArgumentException
@@ -37,10 +34,9 @@ public interface IoC {
     Object resolve(String beanName) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoBeanAnnotationException, BeanNotFoundException;
 
     /**
-     * Add a bean to the container programmatically.
+     * Create an instance of a given type.
      *
      * @param cls The type to be added.
-     * @param <T>
      * @return
      * @throws InstantiationException
      * @throws IllegalAccessException

@@ -1,7 +1,9 @@
 package com.selop.exception;
 
 /**
- * Created by selop on 25/11/15.
+ * Thrown when the scan of a class is aborted due to a missing {@code @Bean} annotation.
+ *
+ * @author selop
  */
 public class NoBeanAnnotationException extends Exception {
     public NoBeanAnnotationException() {

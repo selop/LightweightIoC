@@ -5,7 +5,9 @@ import com.selop.annotation.Bean;
 import javax.inject.Named;
 
 /**
- * Created by selop on 23/11/15.
+ * Testing @Named annotation in conjunction with the IoC container.
+ *
+ * @author selop
  */
 @Bean
 @Named("Alias")

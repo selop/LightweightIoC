@@ -45,7 +45,7 @@ public class ContainerTest {
 
     @Test
     public void twoBeansWithIdenticalNameCauseException() {
-        // TODO: 27/11/15
+
     }
 
     /*

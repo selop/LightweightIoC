@@ -3,7 +3,7 @@ package com.selop.beans;
 import com.selop.annotation.Bean;
 
 /**
- * Created by selop on 25/11/15.
+ * See the {@code BeanInjectorTest} class.
  */
 @Bean
 public class NoInjectFieldsBean {

@@ -15,7 +15,7 @@ public interface Injector {
     /**
      * Injecting into a given bean.
      *
-     * @param bean The bean which fields shall be injected.
+     * @param bean The bean which fields will be scanned and injected if marked as @Inject.
      */
     <T> void inject(T bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException, NoBeanAnnotationException, BeanNotFoundException;
 }

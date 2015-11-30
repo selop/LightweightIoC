@@ -23,6 +23,12 @@ public class BeanInjector implements Injector {
 
     private static Logger log = LoggerFactory.getLogger(BeanInjector.class);
 
+    /**
+     * If the given Bean is annotated with '@Bean' this method will loop through every field
+     * and inject through setter-injection by looking up in the DI-dictionary.
+     *
+     * @param bean The bean which dependencies shall be injected.
+     */
     public <T> void inject(T bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException, NoBeanAnnotationException, BeanNotFoundException {
 
         SimpleContainer container = SimpleContainer.getInstance();
@@ -65,7 +71,12 @@ public class BeanInjector implements Injector {
 
     }
 
-    //Look for @Inject annotations of fields for the class and it's parent super class.
+    /**
+     * Looks for @Inject annotations of fields for the class and it's parent super class.
+     *
+     * @param cls Given bean to perform the lookup.
+     * @return List of fields annotated with @Inject
+     */
     public List<Field> getAllFields(Class cls) {
         List<Field> fields = new ArrayList<Field>();
 

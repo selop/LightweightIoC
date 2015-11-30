@@ -1,6 +1,7 @@
 package com.selop;
 
 import com.selop.beans.MyBean;
+import com.selop.beans.Parent;
 import com.selop.container.PackageScanner;
 import com.selop.container.SimpleContainer;
 import com.selop.inject.BeanInjector;
@@ -8,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Hello world!
+ * Testing the DI container.
  *
  * @author selop
  */
@@ -32,7 +33,7 @@ public class App {
             injector.inject(testBean);
 
             // automatic injection
-            SimpleContainer.getInstance().resolve(MyBean.class);
+            SimpleContainer.getInstance().resolve(Parent.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

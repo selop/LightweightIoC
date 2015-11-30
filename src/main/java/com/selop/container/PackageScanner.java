@@ -66,7 +66,7 @@ public class PackageScanner {
     private void scanSingletonBean(Class<?> bean, String name) {
         if (bean.isAnnotationPresent(Singleton.class)) {
             container.getRegisteredBeans().put(bean, null);
-            log.info("Bean : " + bean.getCanonicalName()+ " with @Singleton annotation registered.");
+            log.info("Singleton-Bean : " + bean.getCanonicalName()+ " with @Singleton annotation registered.");
         }
     }
 
@@ -76,7 +76,7 @@ public class PackageScanner {
 
         if(bean.isAnnotationPresent(Singleton.class)){
             container.getNamedBeans().put(name,bean);
-            log.info("Class : " + bean.getCanonicalName() +" with @Name annotation is registered.");
+            log.info("Bean : " + name +" with @Name annotation is registered.");
         }
     }
 

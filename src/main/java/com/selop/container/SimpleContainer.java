@@ -14,7 +14,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by selop on 23/11/15.
+ * Simple DI Container to resolve and manage beans.
+ *
+ * @author selop
  */
 public class SimpleContainer implements IoC {
 
@@ -28,7 +30,6 @@ public class SimpleContainer implements IoC {
 
     private BeanInjector beanInjector = new BeanInjector();
 
-    // Singleton pattern
     private static SimpleContainer instance = new SimpleContainer();
 
     public static SimpleContainer getInstance(){
@@ -43,7 +44,7 @@ public class SimpleContainer implements IoC {
         }
 
         String clsName = cls.getCanonicalName();
-        log.info("Register bean : " + clsName);
+        log.info("Create instance of bean : " + clsName);
 
         T newInstance;
 
@@ -103,7 +104,6 @@ public class SimpleContainer implements IoC {
 
         return resolve(cls);
     }
-
 
     public Map<Class, Object> getRegisteredBeans() {
         return registeredBeans;

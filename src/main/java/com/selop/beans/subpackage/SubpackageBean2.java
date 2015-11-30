@@ -2,21 +2,16 @@ package com.selop.beans.subpackage;
 
 import com.selop.annotation.Bean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
-/**
- * Created by selop on 27/11/15.
- */
 @Bean
 @Singleton
-public class SubpackageBean2 {
-    SubpackageBean dep;
+@Named("Subpackage")
+public class SubpackageBean2 implements SubpackageBeanInterface {
 
-    public SubpackageBean getDep() {
-        return dep;
-    }
-
-    public void setDep(SubpackageBean dep) {
-        this.dep = dep;
-    }
+    @Inject
+    @Named("Subpackage")
+    public SubpackageBean bean;
 }
