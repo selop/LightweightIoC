@@ -6,14 +6,14 @@ import javax.inject.Inject;
  * See {@code BeanInjectorTest}.
  */
 public class NoAnnotationBean {
+    private final MyBean dep;
+
     @Inject
-    MyBean dep;
+    public NoAnnotationBean(MyBean dep) {
+        this.dep = dep;
+    }
 
     public MyBean getDep() {
         return dep;
-    }
-
-    public void setDep(MyBean dep) {
-        this.dep = dep;
     }
 }

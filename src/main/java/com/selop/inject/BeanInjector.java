@@ -44,7 +44,7 @@ public class BeanInjector implements Injector {
             String fieldName = field.getName();
             String className = cls.getCanonicalName();
 
-            log.debug(className + "::" + fieldName + ": with @Inject annotation found. ");
+            log.debug("{}::{}: with @Inject annotation found. ", className, fieldName);
 
             Method setterMethod = null;
             try {
@@ -66,7 +66,7 @@ public class BeanInjector implements Injector {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            log.info("Injected into method " + setterMethod.getName() + " for class " + className);
+            log.info("Injected into method {} for class {}", setterMethod.getName(), className);
         }
 
     }

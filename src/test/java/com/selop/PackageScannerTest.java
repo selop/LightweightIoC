@@ -2,22 +2,24 @@ package com.selop;
 
 import com.selop.container.PackageScanner;
 import com.selop.container.SimpleContainer;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * See {@code PackageScanner} class.
  *
  * @author selop
  */
-public class PackageScannerTest {
+class PackageScannerTest {
 
     private static final String PACKAGE_ROOT = "com.selop.beans";
 
@@ -30,8 +32,8 @@ public class PackageScannerTest {
     List<Class<?>> beanSingleton;
     List<Class<?>> beanNamed;
 
-    @Before
-    public void before() {
+    @BeforeEach
+    void before() {
         scanner = new PackageScanner();
         scanner.scan(PACKAGE_ROOT);
 
@@ -46,34 +48,34 @@ public class PackageScannerTest {
                 .collect(Collectors.toList());
     }
 
-    @After
-    public void after() {
+    @AfterEach
+    void after() {
         SimpleContainer.getInstance().release();
     }
 
     @Test
-    public void scannerNotNull() {
-        Assert.assertNotNull(scanner);
+    void scannerNotNull() {
+        assertNotNull(scanner);
     }
 
     @Test
-    public void beanListSingletonNotNull() {
-        Assert.assertNotNull(beanSingleton);
+    void beanListSingletonNotNull() {
+        assertNotNull(beanSingleton);
     }
 
     @Test
-    public void beanListNamedNotNull() {
-        Assert.assertNotNull(beanNamed);
+    void beanListNamedNotNull() {
+        assertNotNull(beanNamed);
     }
 
     @Test
-    public void checkCountOfFoundBeansWithSingletonAnnotations() {
-        Assert.assertEquals(beanSingleton.size(), BEANS_ANNOTATED_WITH_SINGLETON);
+    void checkCountOfFoundBeansWithSingletonAnnotations() {
+        assertEquals(beanSingleton.size(), BEANS_ANNOTATED_WITH_SINGLETON);
     }
 
     @Test
-    public void checkCountOfFoundBeansWithNamedAnnotations() {
-        Assert.assertEquals(beanNamed.size(), BEANS_ANNOTATED_WITH_NAMED);
+    void checkCountOfFoundBeansWithNamedAnnotations() {
+        assertEquals(beanNamed.size(), BEANS_ANNOTATED_WITH_NAMED);
     }
 
 }

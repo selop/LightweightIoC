@@ -1,50 +1,54 @@
 package com.selop;
 
 import com.selop.beans.AnotherBean;
+import com.selop.beans.MyBean;
 import com.selop.beans.NoAnnotationBean;
 import com.selop.beans.subpackage.CircularDepBean;
 import com.selop.container.SimpleContainer;
 import com.selop.exception.BeanNotFoundException;
 import com.selop.exception.NoBeanAnnotationException;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * See {@code SimpleContainer} class.
  */
-public class ContainerTest {
+class ContainerTest {
 
-    @After
-    public void after() {
+    @AfterEach
+    void after() {
         SimpleContainer.getInstance().release();
     }
 
     @Test
-    public void addingBeanWithoutAnnotationLeadsToException() throws Exception {
-        NoAnnotationBean bean = new NoAnnotationBean();
-        try {
+    void addingBeanWithoutAnnotationLeadsToException() {
+        NoAnnotationBean bean = new NoAnnotationBean(new MyBean());
+        
+        NoBeanAnnotationException exception = assertThrows(NoBeanAnnotationException.class, () -> {
             SimpleContainer.getInstance().createInstance(bean.getClass());
-            fail("Expected NoBeanAnnotationException to be thrown");
-        } catch (NoBeanAnnotationException e) {
-            Assert.assertThat(e.getMessage(), is(bean.getClass().getCanonicalName() + " has not been flagged as @Bean"));
-        }
+        });
+        
+        assertThat(exception.getMessage(), is(bean.getClass().getCanonicalName() + " has not been flagged as @Bean"));
     }
 
     @Test
-    public void addingBeanRegistered()  throws Exception {
+    void addingBeanRegistered() throws Exception {
         SimpleContainer.getInstance().getRegisteredBeans().put(AnotherBean.class, null);
         SimpleContainer.getInstance().resolve(AnotherBean.class);
 
-        Assert.assertFalse(SimpleContainer.getInstance().getRegisteredBeans().isEmpty());
-        Assert.assertEquals(SimpleContainer.getInstance().getRegisteredBeans().size(),1);
+        assertFalse(SimpleContainer.getInstance().getRegisteredBeans().isEmpty());
+        assertEquals(1, SimpleContainer.getInstance().getRegisteredBeans().size());
     }
 
     @Test
-    public void twoBeansWithIdenticalNameCauseException() {
+    void twoBeansWithIdenticalNameCauseException() {
 
     }
 
@@ -54,32 +58,31 @@ public class ContainerTest {
      *  Parent -- injectDependency --> Bean
      */
     @Test
-    public void circularDependencyLeadsToException() throws Exception {
-        try {
-            SimpleContainer.getInstance().getNamedBeans().put("CircularDepBean",CircularDepBean.class);
+    void circularDependencyLeadsToException() {
+        SimpleContainer.getInstance().getNamedBeans().put("CircularDepBean",CircularDepBean.class);
+        
+        InstantiationException exception = assertThrows(InstantiationException.class, () -> {
             SimpleContainer.getInstance().resolve("CircularDepBean");
-            fail("Expected InstantiationException to be thrown");
-        } catch (InstantiationException e) {
-            Assert.assertThat(e.getMessage(), is("Circle detected for class " + CircularDepBean.class.getCanonicalName()));
-        }
+        });
+        
+        assertThat(exception.getMessage(), is("Circle detected for class " + CircularDepBean.class.getCanonicalName()));
     }
 
     @Test
-    public void beanAliasNotFoundLeadsToException() throws Exception {
-        try {
+    void beanAliasNotFoundLeadsToException() {
+        BeanNotFoundException exception = assertThrows(BeanNotFoundException.class, () -> {
             SimpleContainer.getInstance().resolve("Alias");
-            fail("Expected BeanNotFoundException to be thrown");
-        } catch (BeanNotFoundException e) {
-            Assert.assertThat(e.getMessage(), is("Given bean name : " + "Alias" + " was not found."));
-        }
+        });
+        
+        assertThat(exception.getMessage(), is("Given bean name : " + "Alias" + " was not found."));
     }
 
     @Test
-    public void beanAliasIsTheProperInstance() throws Exception {
+    void beanAliasIsTheProperInstance() throws Exception {
         SimpleContainer instance = SimpleContainer.getInstance();
         final String alias = "Alias";
 
         instance.getNamedBeans().put(alias,AnotherBean.class);
-        Assert.assertTrue(instance.resolve(alias) instanceof AnotherBean);
+        assertTrue(instance.resolve(alias) instanceof AnotherBean);
     }
 }
